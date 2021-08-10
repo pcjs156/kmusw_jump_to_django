@@ -24,6 +24,7 @@ ALLOWED_HOSTS = []
 
 APPS = [
     'pybo.apps.PyboConfig',
+    'common.apps.CommonConfig',
 ]
 
 INSTALLED_APPS = [
