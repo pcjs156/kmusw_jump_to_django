@@ -1,8 +1,7 @@
-from datetime import timezone
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render, get_object_or_404
+from django.utils import timezone
 
 from pybo.forms import QuestionForm
 from pybo.models import Question
