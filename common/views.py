@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 
-from common.forms import UserForm
+from common.forms import UserForm, UserPasswordChangeForm
 from pybo.models import Question
 
 
@@ -24,6 +24,16 @@ def signup(request):
 
 
 def my_page(request):
+    if request.method == 'POST':
+        form = UserPasswordChangeForm(request.POST)
+
+        if form.is_valid():
+            new_password = form.cleaned_data.get('password')
+            request.user.set_password(new_password)
+            request.user.save()
+
+            return redirect('pybo:index')
+
     context = {}
 
     questions = request.user.author_question.all()
@@ -31,5 +41,7 @@ def my_page(request):
 
     answers = request.user.author_answer.all()
     context['answers'] = answers
+
+    context['password_change_form'] = UserPasswordChangeForm()
 
     return render(request, 'common/mypage.html', context)

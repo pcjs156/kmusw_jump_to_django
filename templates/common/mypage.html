@@ -8,6 +8,11 @@
             <p id="profile-content" class="card-text">
                 ID: {{ user.username }} <br>
                 E-Mail: {{ user.email }}
+            <form action="{% url 'common:mypage' %}" method="post">
+                {% csrf_token %}
+                {{ password_change_form.as_p }}
+                <input type="submit" value="비밀번호 수정">
+            </form>
             </p>
         </div>
         <hr>
