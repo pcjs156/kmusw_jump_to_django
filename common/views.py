@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 
 from common.forms import UserForm
+from pybo.models import Question
 
 
 def signup(request):
@@ -20,3 +21,15 @@ def signup(request):
     else:
         form = UserForm()
     return render(request, 'common/signup.html', {'form': form})
+
+
+def my_page(request):
+    context = {}
+
+    questions = request.user.author_question.all()
+    context['questions'] = questions
+
+    answers = request.user.author_answer.all()
+    context['answers'] = answers
+
+    return render(request, 'common/mypage.html', context)

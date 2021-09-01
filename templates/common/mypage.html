@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load common_filter %}
+{% block content %}
+    <div class="container my-3">
+        <div id="profile-card" class="card my-3">
+            <h3 class="card-title">사용자 정보</h3>
+            <hr>
+            <p id="profile-content" class="card-text">
+                ID: {{ user.username }} <br>
+                E-Mail: {{ user.email }}
+            </p>
+        </div>
+        <hr>
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="text-center" colspan="3">
+                    작성한 질문 목록
+                </th>
+            </tr>
+            <tr>
+                <th>제목</th>
+                <th>내용</th>
+                <th>작성 일시</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if questions %}
+                {% for question in questions %}
+                    <tr class="text-center">
+                        <td class="text-left">
+                            <a href="{% url 'pybo:detail' question_id=question.id %}">
+                                {{ question.subject|omit }}
+                            </a>
+                        </td>
+                        <td class="text-left">
+                            {{ question.content|omit }}
+                        </td>
+                        <td class="text-left">
+                            {{ question.create_date }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="3" class="text-center">질문이 없습니다.</td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+        <hr>
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="text-center" colspan="3">
+                    작성한 답변 목록
+                </th>
+            </tr>
+            <tr>
+                <th>대상 질문 제목</th>
+                <th>내용</th>
+                <th>작성 일시</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if answers %}
+                {% for answer in answers %}
+                    <tr class="text-center">
+                        <td class="text-left">
+                            <a href="{% url 'pybo:detail' question_id=answer.question.id %}#answer_id={{ answer.id }}">
+                                {{ answer.question.subject|omit }}
+                            </a>
+                        </td>
+                        <td class="text-left">
+                            {{ answer.content|omit }}
+                        </td>
+                        <td class="text-left">
+                            {{ answer.create_date }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="3" class="text-center">질문이 없습니다.</td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
