@@ -2,7 +2,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q, Count
 from django.shortcuts import render, get_object_or_404
 
-from pybo.models import Question
+from pybo.models import Question, Answer
 
 
 def index(request):
@@ -45,5 +45,17 @@ def detail(request, question_id):
     pybo 내용 출력
     """
     question = get_object_or_404(Question, pk=question_id)
-    context = {'question': question}
+
+    ordering = request.GET.get('ordering', 'create_date')
+    page = request.GET.get('page', '1')
+
+    if ordering == 'create_date' or ordering not in ('create_date', 'vote'):
+        answers = question.answer_set.order_by('-create_date')
+    elif ordering == 'vote':
+        answers = question.answer_set.annotate(num_voter=Count('voter')).order_by('-num_voter', '-create_date')
+
+    paginator = Paginator(answers, 10)
+    page_obj = paginator.get_page(page)
+
+    context = {'question': question, 'answers': page_obj, 'ordering': ordering}
     return render(request, 'pybo/question_detail.html', context)
