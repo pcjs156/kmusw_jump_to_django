@@ -57,5 +57,9 @@ def detail(request, question_id):
     paginator = Paginator(answers, 10)
     page_obj = paginator.get_page(page)
 
+    # 조회 수 증가
+    question.view_count += 1
+    question.save()
+
     context = {'question': question, 'answers': page_obj, 'ordering': ordering}
     return render(request, 'pybo/question_detail.html', context)
