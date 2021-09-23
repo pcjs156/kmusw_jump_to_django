@@ -11,13 +11,13 @@ class Question(models.Model):
     voter = models.ManyToManyField(User, related_name='voter_question')
     view_count = models.IntegerField(null=False, blank=False, default=0, verbose_name='조회수')
 
-    FIELD_CHOICES = (
+    CATEGORY_CHOICES = (
         ('BE', '백엔드'),
         ('FE', '프론트엔드')
     )
-    FIELD_MAX_LENGTH = max(map(len, map(lambda e: e[0], FIELD_CHOICES)))
-    field = models.CharField(choices=FIELD_CHOICES, null=False, blank=False,
-                             max_length=FIELD_MAX_LENGTH, verbose_name='질문 분야')
+    CATEGORY_MAX_LENGTH = max(map(len, map(lambda e: e[0], CATEGORY_CHOICES)))
+    category = models.CharField(choices=CATEGORY_CHOICES, null=False, blank=False,
+                             max_length=CATEGORY_MAX_LENGTH, verbose_name='질문 분야')
 
     def __str__(self):
         subject = self.subject if len(self.subject) < 10 else self.subject[:10] + '...'
