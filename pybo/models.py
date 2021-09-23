@@ -9,6 +9,7 @@ class Question(models.Model):
     create_date = models.DateTimeField()
     modify_date = models.DateTimeField(null=True, blank=True)
     voter = models.ManyToManyField(User, related_name='voter_question')
+    view_count = models.IntegerField(null=False, blank=False, default=0, verbose_name='조회수')
 
     def __str__(self):
         subject = self.subject if len(self.subject) < 10 else self.subject[:10] + '...'
