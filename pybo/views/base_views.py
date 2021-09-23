@@ -15,14 +15,23 @@ def index(request):
     kw = request.GET.get('kw', '')
     # 정렬 기준
     so = request.GET.get('so', 'recent')
+    # 카테고리
+    category = request.GET.get('category', 'whole')
+
+    if category == 'whole':
+        question_list = Question.objects.all()
+    elif category in list(map(lambda e: e[0], Question.CATEGORY_CHOICES)):
+        question_list = Question.objects.filter(category=category)
+    else:
+        question_list = Question.objects.all()
 
     # 조회 및 정렬
     if so == 'recommend':
-        question_list = Question.objects.annotate(num_voter=Count('voter')).order_by('-num_voter', '-create_date')
+        question_list = question_list.annotate(num_voter=Count('voter')).order_by('-num_voter', '-create_date')
     elif so == 'popular':
-        question_list = Question.objects.annotate(num_answer=Count('answer')).order_by('-num_answer', '-create_date')
+        question_list = question_list.annotate(num_answer=Count('answer')).order_by('-num_answer', '-create_date')
     else:  # recent
-        question_list = Question.objects.order_by('-create_date')
+        question_list = question_list.order_by('-create_date')
 
     if kw:
         question_list = question_list.filter(
@@ -36,7 +45,7 @@ def index(request):
     paginator = Paginator(question_list, 10)
     page_obj = paginator.get_page(page)
 
-    context = {'question_list': page_obj, 'page': page, 'kw': kw}
+    context = {'question_list': page_obj, 'page': page, 'kw': kw, 'category': category}
     return render(request, 'pybo/question_list.html', context)
 
 
