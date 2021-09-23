@@ -5,10 +5,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_PATH = os.path.join(str(BASE_DIR), 'secret.json')
-with open(SECRET_PATH, mode='r', encoding='utf-8') as file:
-    secret_object = json.load(file)
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -71,10 +67,8 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': secret_object['DB_INFO']['NAME'],
-        'USER': secret_object['DB_INFO']['USER'],
-        'PASSWORD': secret_object['DB_INFO']['PASSWORD'],
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
